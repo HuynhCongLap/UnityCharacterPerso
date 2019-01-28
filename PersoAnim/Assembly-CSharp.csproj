@@ -53,8 +53,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\CapsuleController.cs" />
      <Compile Include="Assets\Scripts\FootIK.cs" />
      <Compile Include="Assets\Scripts\PlayeController.cs" />
+     <Compile Include="Assets\Scripts\Raining.cs" />
+     <Compile Include="Assets\Scripts\Shooting.cs" />
+     <Compile Include="Assets\Scripts\Wall.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/Pin/Desktop/Github/UnityCharacterPerso/PersoAnim/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
