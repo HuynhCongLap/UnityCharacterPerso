@@ -40,6 +40,7 @@ public class PlayAnimationEditor : EditorWindow
     // accelerate or slow the animation
     protected float m_f_scaleTime = 1f;
 
+    protected float coefficients;
 
     // Dictionnary of string & List<Vector3> which contains all the position of one body Joint
     private Dictionary<string, List<Vector3>> m_trajectories;
@@ -170,7 +171,7 @@ public class PlayAnimationEditor : EditorWindow
             EditorGUI.BeginChangeCheck();
             // Then we create the Object that we want to track some change on 
             m_f_scaleTime = EditorGUILayout.Slider("Scale Time", m_f_scaleTime, 0.0f, 2.0f);
-
+            coefficients  = EditorGUILayout.Slider("Muti Coefficients", coefficients, 1.0f, 2.0f);
             if (!m_b_isRunning)
             {
                 // Create a Button in order to plays the AnimationClip
@@ -215,32 +216,6 @@ public class PlayAnimationEditor : EditorWindow
     }
     
 
-    public static double[,] GaussianBlur(int lenght, double weight)
-    {
-        double[,] kernel = new double[lenght, lenght];
-        double kernelSum = 0;
-        int foff = (lenght - 1) / 2;
-        double distance = 0;
-        double constant = 1d / (2 * Math.PI * weight * weight);
-        for (int y = -foff; y <= foff; y++)
-        {
-            for (int x = -foff; x <= foff; x++)
-            {
-                distance = ((y* y) + (x* x)) / (2 * weight* weight);
-        kernel[y + foff, x + foff] = constant* Math.Exp(-distance);
-        kernelSum += kernel[y + foff, x + foff];
-            }
-        }
-        for (int y = 0; y<lenght; y++)
-        {
-            for (int x = 0; x<lenght; x++)
-            {
-                kernel[y, x] = kernel[y, x] * 1d / kernelSum;
-            }
-        }
-        return kernel;
-    }
-
 
     public void GaussianAnim()
     {
@@ -256,7 +231,7 @@ public class PlayAnimationEditor : EditorWindow
 
             Debug.Log("Curve number:" + curve_count);
             var list = new List<float>();
- 
+            // try a normal blur motion
             for (int time=2; time< curve.length-2; time++)
             {
                 Debug.Log("Time: " + time + " Value: " + curve.keys[time].value);
@@ -291,25 +266,25 @@ public class PlayAnimationEditor : EditorWindow
             }
 
 
-           /*
-            for(int time=0; time< curve.length-2; time+= 2)
+            // Multi-résolution n = 1
+            for (int time=0; time< curve.length-2; time+= 2)
             {
 
                 Keyframe temp1 = curve[time];
                 Keyframe temp2 = curve[time+1];
-                //double v1 = curve[time + 1].value * Math.Exp(-curve[time+1].value * curve[time+1].value/0.0001); 
-                //double v2 = curve[time + 2].value * Math.Exp(-curve[time+2].value * curve[time+2].value/0.0001);
+                
 
                 double v1 = temp1.value;
                 double v2 = temp2.value;
 
-                double deplace = ( (v2 - v1) / 2) * 1.5;
+                double deplace = ( (v2 - v1) / 2) * coefficients;
 
                 temp1.value = (float)(( (v2 + v1) / 2) - deplace);
                 temp2.value = (float)(( (v2 + v1) / 2) + deplace);
                 curve.MoveKey(time, temp1);
                 curve.MoveKey(time+1, temp2);
-            }*/
+            }
+
             Debug.Log("Curve length after: " + curve.length);
             Debug.Log("End Curve number:" + curve_count);
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CapsuleController : MonoBehaviour
 {
-    public float speed = 2f; // speed move
-    public float sensitivity = 20f;  // sensitivity of the mouse
+    public float speed = 3f; // speed move
+    public float sensitivity = 10f;  // sensitivity of the mouse
     CharacterController player;
 
     public GameObject eyes;
